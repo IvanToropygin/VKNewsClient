@@ -29,7 +29,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sumin.vknewsclient.R
 import com.sumin.vknewsclient.ui.theme.domain.FeedPost
@@ -40,7 +39,10 @@ import com.sumin.vknewsclient.ui.theme.domain.StatisticType
 fun PostCard(
     modifier: Modifier = Modifier,
     feedPost: FeedPost,
-    onStatisticsItemClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -71,7 +73,10 @@ fun PostCard(
 
         Statistics(
             statistics = feedPost.statistics,
-            onItemClickListener = onStatisticsItemClickListener
+            onViewsClickListener = onViewsClickListener,
+            onShareClickListener = onShareClickListener,
+            onCommentClickListener = onCommentClickListener,
+            onLikeClickListener = onLikeClickListener
         )
     }
 }
@@ -113,7 +118,10 @@ private fun PostHeader(feedPost: FeedPost) {
 @Composable
 private fun Statistics(
     statistics: List<StatisticItem>,
-    onItemClickListener: (StatisticItem) -> Unit,
+    onViewsClickListener: (StatisticItem) -> Unit,
+    onShareClickListener: (StatisticItem) -> Unit,
+    onCommentClickListener: (StatisticItem) -> Unit,
+    onLikeClickListener: (StatisticItem) -> Unit
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -129,7 +137,7 @@ private fun Statistics(
                 count = viewsItem.count.toString(),
                 iconResId = R.drawable.ic_views_count,
                 contentDescription = "view count icon",
-                onItemClickListener = { onItemClickListener(viewsItem) }
+                onItemClickListener = { onViewsClickListener(viewsItem) }
             )
         }
         Row(
@@ -141,21 +149,21 @@ private fun Statistics(
                 count = sharesItem.count.toString(),
                 iconResId = R.drawable.ic_share,
                 contentDescription = "share button icon",
-                onItemClickListener = { onItemClickListener(sharesItem) }
+                onItemClickListener = { onShareClickListener(sharesItem) }
             )
             val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
                 count = commentsItem.count.toString(),
                 iconResId = R.drawable.ic_comment,
                 contentDescription = "comment count icon",
-                onItemClickListener = { onItemClickListener(commentsItem) }
+                onItemClickListener = { onCommentClickListener(commentsItem) }
             )
             val likesItem = statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
                 count = likesItem.count.toString(),
                 iconResId = R.drawable.ic_like,
                 contentDescription = "like button icon",
-                onItemClickListener = { onItemClickListener(likesItem) }
+                onItemClickListener = { onLikeClickListener(likesItem) }
             )
         }
     }

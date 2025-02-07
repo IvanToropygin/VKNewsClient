@@ -9,18 +9,17 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.sumin.vknewsclient.MainViewModel
 import com.sumin.vknewsclient.ui.theme.domain.FeedPost
 
 @Composable
-fun MainScreen() {
-
-    val feedPost = remember { mutableStateOf(FeedPost()) }
+fun MainScreen(viewModel: MainViewModel) {
 
     Scaffold(
         bottomBar = {
@@ -49,21 +48,15 @@ fun MainScreen() {
             }
         }
     ) {
+        val feedPost = viewModel.feedPost.observeAsState(FeedPost())
         it.toString()
         PostCard(
             modifier = Modifier.padding(8.dp),
             feedPost = feedPost.value,
-            onStatisticsItemClickListener = { clickedItem ->
-                val oldStats = feedPost.value.statistics
-                val newStats = oldStats.toMutableList().apply {
-                    replaceAll { statsItem ->
-                        if (statsItem.type == clickedItem.type)
-                            statsItem.copy(count = statsItem.count + 1)
-                        else statsItem
-                    }
-                }
-                feedPost.value = feedPost.value.copy(statistics = newStats)
-            },
+            onViewsClickListener = viewModel::updateCount,
+            onShareClickListener = viewModel::updateCount,
+            onCommentClickListener = viewModel::updateCount,
+            onLikeClickListener = viewModel::updateCount
         )
     }
 }
