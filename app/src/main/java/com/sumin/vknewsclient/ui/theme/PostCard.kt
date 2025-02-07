@@ -3,11 +3,13 @@ package com.sumin.vknewsclient.ui.theme
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -30,9 +32,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.sumin.vknewsclient.R
+import com.sumin.vknewsclient.ui.theme.domain.FeedPost
+import com.sumin.vknewsclient.ui.theme.domain.StatisticItem
+import com.sumin.vknewsclient.ui.theme.domain.StatisticType
 
 @Composable
-fun PostCard() {
+fun PostCard(
+    modifier: Modifier = Modifier,
+    feedPost: FeedPost,
+    onStatisticsItemClickListener: (StatisticItem) -> Unit,
+) {
     Card(
         modifier = Modifier
             .padding(8.dp)
@@ -41,27 +50,34 @@ fun PostCard() {
         shape = RoundedCornerShape(4.dp),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onBackground)
     ) {
-        PostHeader()
+
+        PostHeader(feedPost)
+
         Text(
             modifier = Modifier.padding(8.dp),
-            text = "кабаныч, когда узнал, что если сотрудникам не платить" +
-                    " они начинают умирать от голода"
+            text = feedPost.content
         )
+
         Image(
             modifier = Modifier
                 .background(MaterialTheme.colorScheme.background)
                 .fillMaxWidth()
+                .height(200.dp)
                 .padding(horizontal = 8.dp),
-            painter = painterResource(R.drawable.post_content_image),
+            painter = painterResource(id = feedPost.contentImageResId),
             contentDescription = "Content image",
             contentScale = ContentScale.Crop
         )
-        PostFooter()
+
+        Statistics(
+            statistics = feedPost.statistics,
+            onItemClickListener = onStatisticsItemClickListener
+        )
     }
 }
 
 @Composable
-private fun PostHeader() {
+private fun PostHeader(feedPost: FeedPost) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
@@ -72,16 +88,16 @@ private fun PostHeader() {
                 .padding(8.dp)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.background),
-            painter = painterResource(R.drawable.post_comunity_thumbnail),
+            painter = painterResource(feedPost.avatarResId),
             contentDescription = "Group icon"
         )
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = "Уволено",
+                text = feedPost.communityName,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "14:00",
+                text = feedPost.publicationDate,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSecondary
             )
@@ -95,44 +111,71 @@ private fun PostHeader() {
 }
 
 @Composable
-private fun PostFooter() {
-    Row(modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically) {
-        Row(Modifier
-            .padding(8.dp)
-            .weight(1f)) {
+private fun Statistics(
+    statistics: List<StatisticItem>,
+    onItemClickListener: (StatisticItem) -> Unit,
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(
+            Modifier
+                .padding(8.dp)
+                .weight(1f)
+        ) {
+            val viewsItem = statistics.getItemByType(StatisticType.VIEWS)
             IconWithText(
-                count = "206",
+                count = viewsItem.count.toString(),
                 iconResId = R.drawable.ic_views_count,
-                contentDescription = "view count icon"
+                contentDescription = "view count icon",
+                onItemClickListener = { onItemClickListener(viewsItem) }
             )
         }
         Row(
             Modifier.weight(1f),
             horizontalArrangement = Arrangement.SpaceAround
         ) {
+            val sharesItem = statistics.getItemByType(StatisticType.SHARES)
             IconWithText(
-                count = "206",
+                count = sharesItem.count.toString(),
                 iconResId = R.drawable.ic_share,
-                contentDescription = "share button icon"
+                contentDescription = "share button icon",
+                onItemClickListener = { onItemClickListener(sharesItem) }
             )
+            val commentsItem = statistics.getItemByType(StatisticType.COMMENTS)
             IconWithText(
-                count = "11",
+                count = commentsItem.count.toString(),
                 iconResId = R.drawable.ic_comment,
-                contentDescription = "comment count icon"
+                contentDescription = "comment count icon",
+                onItemClickListener = { onItemClickListener(commentsItem) }
             )
+            val likesItem = statistics.getItemByType(StatisticType.LIKES)
             IconWithText(
-                count = "491",
+                count = likesItem.count.toString(),
                 iconResId = R.drawable.ic_like,
-                contentDescription = "like button  icon"
+                contentDescription = "like button icon",
+                onItemClickListener = { onItemClickListener(likesItem) }
             )
         }
     }
 }
 
+fun List<StatisticItem>.getItemByType(type: StatisticType): StatisticItem {
+    return this.find { it.type == type } ?: throw IllegalStateException("cannot find type: $type")
+}
+
 @Composable
-private fun IconWithText(iconResId: Int, count: String, contentDescription: String) {
+private fun IconWithText(
+    iconResId: Int,
+    count: String,
+    contentDescription: String,
+    onItemClickListener: () -> Unit,
+) {
     Row(
+        modifier = Modifier.clickable {
+            onItemClickListener()
+        },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(text = count)
@@ -142,27 +185,5 @@ private fun IconWithText(iconResId: Int, count: String, contentDescription: Stri
             contentDescription = contentDescription,
             tint = MaterialTheme.colorScheme.onSecondary
         )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewCardLight() {
-    VKNewsClientTheme(
-        dynamicColor = false,
-        darkTheme = false
-    ) {
-        PostCard()
-    }
-}
-
-@Preview
-@Composable
-fun PreviewCardDark() {
-    VKNewsClientTheme(
-        dynamicColor = false,
-        darkTheme = true
-    ) {
-        PostCard()
     }
 }

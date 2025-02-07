@@ -1,63 +1,31 @@
 package com.sumin.vknewsclient.ui.theme
 
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarDuration
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import kotlinx.coroutines.launch
+import androidx.compose.ui.unit.dp
+import com.sumin.vknewsclient.ui.theme.domain.FeedPost
 
 @Composable
 fun MainScreen() {
-    val snackbarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-    var fabIsVisible by rememberSaveable { mutableStateOf(true) }
+
+    val feedPost = remember { mutableStateOf(FeedPost()) }
 
     Scaffold(
-        snackbarHost = {
-            SnackbarHost(
-                hostState = snackbarHostState
-            )
-        },
-        floatingActionButton = {
-            if (fabIsVisible) {
-                FloatingActionButton(onClick = {
-                    scope.launch {
-                        val action = snackbarHostState.showSnackbar(
-                            message = "Snackbar clicked",
-                            actionLabel = "Hide FAB",
-                            duration = SnackbarDuration.Long
-                        )
-                        if(action == SnackbarResult.ActionPerformed) fabIsVisible = false
-                    }
-                }) {
-                    Icon(Icons.Outlined.FavoriteBorder, contentDescription = null)
-                }
-            }
-        },
         bottomBar = {
             NavigationBar {
-                var selectedItemPosition by rememberSaveable { mutableIntStateOf(0) }
+                var selectedItemPosition = rememberSaveable { mutableStateOf(0) }
 
                 val items = listOf(
                     NavigationItem.Home,
@@ -66,8 +34,8 @@ fun MainScreen() {
                 )
                 items.forEachIndexed { index, item ->
                     NavigationBarItem(
-                        selected = selectedItemPosition == index,
-                        onClick = { selectedItemPosition = index },
+                        selected = selectedItemPosition.value == index,
+                        onClick = { selectedItemPosition.value = index },
                         icon = { Icon(item.icon, contentDescription = null) },
                         label = { Text(text = stringResource(id = item.titleResId)) },
                         colors = NavigationBarItemDefaults.colors(
@@ -81,9 +49,21 @@ fun MainScreen() {
             }
         }
     ) {
-        Text(
-            modifier = Modifier.padding(it),
-            text = "Scaffold"
+        it.toString()
+        PostCard(
+            modifier = Modifier.padding(8.dp),
+            feedPost = feedPost.value,
+            onStatisticsItemClickListener = { clickedItem ->
+                val oldStats = feedPost.value.statistics
+                val newStats = oldStats.toMutableList().apply {
+                    replaceAll { statsItem ->
+                        if (statsItem.type == clickedItem.type)
+                            statsItem.copy(count = statsItem.count + 1)
+                        else statsItem
+                    }
+                }
+                feedPost.value = feedPost.value.copy(statistics = newStats)
+            },
         )
     }
 }
