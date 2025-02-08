@@ -3,6 +3,7 @@ package com.sumin.vknewsclient.ui.theme.domain
 import com.sumin.vknewsclient.R
 
 data class FeedPost(
+    val id: Int = 0,
     val communityName: String = "/dev/null",
     val publicationDate: String = "13:00",
     val avatarResId: Int = R.drawable.post_comunity_thumbnail,
