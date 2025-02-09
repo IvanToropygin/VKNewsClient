@@ -3,7 +3,6 @@ package com.sumin.vknewsclient
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sumin.vknewsclient.ui.theme.NavigationItem
 import com.sumin.vknewsclient.ui.theme.domain.FeedPost
 import com.sumin.vknewsclient.ui.theme.domain.StatisticItem
 
@@ -15,13 +14,6 @@ class MainViewModel : ViewModel() {
 
     private val _feedPosts = MutableLiveData<List<FeedPost>>(sourceList)
     val feedPosts: LiveData<List<FeedPost>> get() = _feedPosts
-
-    private val _selectedNavItem = MutableLiveData<NavigationItem>(NavigationItem.Home)
-    val selectedNavItem: LiveData<NavigationItem> = _selectedNavItem
-
-    fun selectNavItem(item: NavigationItem) {
-        _selectedNavItem.value = item
-    }
 
     fun updateCount(
         feedPost: FeedPost,
