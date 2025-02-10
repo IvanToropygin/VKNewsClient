@@ -3,8 +3,8 @@ package com.sumin.vknewsclient
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sumin.vknewsclient.ui.theme.domain.FeedPost
-import com.sumin.vknewsclient.ui.theme.domain.StatisticItem
+import com.sumin.vknewsclient.domain.FeedPost
+import com.sumin.vknewsclient.domain.StatisticItem
 
 class MainViewModel : ViewModel() {
 

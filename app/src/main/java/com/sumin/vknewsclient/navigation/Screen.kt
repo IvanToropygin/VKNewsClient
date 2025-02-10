@@ -1,4 +1,4 @@
-package com.sumin.vknewsclient.ui.theme.navigation
+package com.sumin.vknewsclient.navigation
 
 sealed class Screen(val route: String) {
 

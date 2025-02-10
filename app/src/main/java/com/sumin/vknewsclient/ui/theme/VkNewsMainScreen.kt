@@ -18,8 +18,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sumin.vknewsclient.MainViewModel
-import com.sumin.vknewsclient.ui.theme.navigation.AppNavGraph
-import com.sumin.vknewsclient.ui.theme.navigation.rememberNavigationState
+import com.sumin.vknewsclient.navigation.AppNavGraph
+import com.sumin.vknewsclient.navigation.rememberNavigationState
 
 @Composable
 fun MainScreen(viewModel: MainViewModel) {

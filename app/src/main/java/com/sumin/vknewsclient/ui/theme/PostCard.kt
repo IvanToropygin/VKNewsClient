@@ -31,9 +31,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.sumin.vknewsclient.R
-import com.sumin.vknewsclient.ui.theme.domain.FeedPost
-import com.sumin.vknewsclient.ui.theme.domain.StatisticItem
-import com.sumin.vknewsclient.ui.theme.domain.StatisticType
+import com.sumin.vknewsclient.domain.FeedPost
+import com.sumin.vknewsclient.domain.StatisticItem
+import com.sumin.vknewsclient.domain.StatisticType
 
 @Composable
 fun PostCard(

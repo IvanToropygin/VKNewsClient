@@ -1,4 +1,4 @@
-package com.sumin.vknewsclient.ui.theme.domain
+package com.sumin.vknewsclient.domain
 
 import com.sumin.vknewsclient.R
 
