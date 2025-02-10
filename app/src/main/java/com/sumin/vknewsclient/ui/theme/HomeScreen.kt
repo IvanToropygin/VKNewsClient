@@ -1,5 +1,6 @@
 package com.sumin.vknewsclient.ui.theme
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,12 +30,16 @@ fun HomeScreen(viewModel: MainViewModel, paddingValues: PaddingValues) {
             paddingValues = paddingValues
         )
 
-        is HomeScreenState.Comments -> CommentsScreen(
-            feedPost = currentState.feedPost,
-            comments = currentState.comments
-        )
+        is HomeScreenState.Comments -> {
+            CommentsScreen(
+                feedPost = currentState.feedPost,
+                comments = currentState.comments,
+                onBackPressed = { viewModel.closeComments() }
+            )
+            BackHandler { viewModel.closeComments() }
+        }
 
-        HomeScreenState.Initial -> {}
+        HomeScreenState.Initial -> { }
     }
 }
 
@@ -76,9 +81,10 @@ private fun FeedPosts(
                     feedPost = post,
                     onViewsClickListener = { viewModel.updateCount(feedPost = post, item = it) },
                     onShareClickListener = { viewModel.updateCount(feedPost = post, item = it) },
-                    onCommentClickListener = { viewModel.updateCount(feedPost = post, item = it) },
+                    onCommentClickListener = { viewModel.showComments(feedPost = post) },
                     onLikeClickListener = { viewModel.updateCount(feedPost = post, item = it) }
                 )
             }
         }
     }
+}
