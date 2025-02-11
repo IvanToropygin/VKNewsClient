@@ -14,7 +14,7 @@ sealed class NavigationItem(
     val icon: ImageVector,
 ) {
     object Home : NavigationItem(
-        screen = Screen.NewsFeed,
+        screen = Screen.Home,
         titleResId = R.string.nav_item_main,
         icon = Icons.Outlined.Home
     )
