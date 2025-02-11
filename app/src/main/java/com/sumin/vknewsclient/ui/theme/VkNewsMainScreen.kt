@@ -59,9 +59,10 @@ fun MainScreen() {
                         paddingValues,
                         onCommentsClickListener = { commentsToPost.value = it }
                     )
-                } else CommentsScreen {
-                    commentsToPost.value = null
-                }
+                } else CommentsScreen(
+                    onBackPressed = { commentsToPost.value = null },
+                    feedPost = commentsToPost.value!!
+                )
             },
             favouriteScreenContent = { TextCounter("Favourite") },
             profileScreenContent = { TextCounter("Profile") })
