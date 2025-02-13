@@ -53,6 +53,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation("androidx.navigation:navigation-compose:2.8.6")
     implementation("com.google.code.gson:gson:2.12.1")
+    implementation("io.coil-kt.coil3:coil-compose:3.1.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
