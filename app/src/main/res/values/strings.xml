@@ -5,5 +5,7 @@
     <string name="nav_item_profile">Профиль</string>
     <string name="vk_logo_icon">VK logo icon</string>
     <string name="button_login">Log in</string>
+    <string name="content_image">Content image</string>
+    <string name="more_button">More button</string>
     <integer name="com_vk_sdk_AppId">53080999</integer>
 </resources>

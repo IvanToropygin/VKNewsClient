@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -28,8 +29,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.sumin.vknewsclient.R
 import com.sumin.vknewsclient.domain.FeedPost
 import com.sumin.vknewsclient.domain.StatisticItem
@@ -54,21 +57,16 @@ fun PostCard(
     ) {
 
         PostHeader(feedPost)
-
-        Text(
-            modifier = Modifier.padding(8.dp),
-            text = feedPost.content
-        )
-
-        Image(
+        Text(text = feedPost.content)
+        Spacer(modifier = Modifier.height(8.dp))
+        AsyncImage(
+            model = feedPost.contentImageUrl,
             modifier = Modifier
-                .background(MaterialTheme.colorScheme.background)
                 .fillMaxWidth()
-                .height(200.dp)
+                .wrapContentHeight()
                 .padding(horizontal = 8.dp),
-            painter = painterResource(id = feedPost.contentImageResId),
-            contentDescription = "Content image",
-            contentScale = ContentScale.Crop
+            contentDescription = stringResource(R.string.content_image),
+            contentScale = ContentScale.FillWidth
         )
 
         Statistics(
@@ -87,19 +85,19 @@ private fun PostHeader(feedPost: FeedPost) {
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
+        AsyncImage(
+            model = feedPost.communityImageUrl,
             modifier = Modifier
-                .size(70.dp)
-                .padding(8.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.background),
-            painter = painterResource(feedPost.avatarResId),
+                .size(50.dp)
+                .clip(CircleShape),
             contentDescription = "Group icon"
         )
+        Spacer(modifier = Modifier.width(4.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
                 text = feedPost.communityName,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onPrimary
             )
             Text(
                 text = feedPost.publicationDate,
@@ -109,7 +107,7 @@ private fun PostHeader(feedPost: FeedPost) {
         }
         Icon(
             imageVector = Icons.Rounded.MoreVert,
-            contentDescription = "More button",
+            contentDescription = stringResource(R.string.more_button),
             tint = MaterialTheme.colorScheme.onPrimary
         )
     }
