@@ -1,10 +1,9 @@
-package com.sumin.vknewsclient.ui.theme
+package com.sumin.vknewsclient.presentation.mainScreen
 
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.sumin.vknewsclient.AuthState
 import com.vk.api.sdk.VK
 import com.vk.api.sdk.auth.VKAuthenticationResult
 

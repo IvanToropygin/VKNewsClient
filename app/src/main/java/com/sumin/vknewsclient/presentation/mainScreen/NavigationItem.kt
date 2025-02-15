@@ -1,4 +1,4 @@
-package com.sumin.vknewsclient.ui.theme
+package com.sumin.vknewsclient.presentation.mainScreen
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Favorite

@@ -1,4 +1,4 @@
-package com.sumin.vknewsclient.ui.theme
+package com.sumin.vknewsclient.presentation.newsScreen
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image

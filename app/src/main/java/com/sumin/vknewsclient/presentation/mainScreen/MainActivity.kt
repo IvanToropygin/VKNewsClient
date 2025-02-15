@@ -1,4 +1,4 @@
-package com.sumin.vknewsclient
+package com.sumin.vknewsclient.presentation.mainScreen
 
 import android.os.Build
 import android.os.Bundle
@@ -8,9 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.sumin.vknewsclient.ui.theme.LoginScreen
-import com.sumin.vknewsclient.ui.theme.MainScreen
-import com.sumin.vknewsclient.ui.theme.MainViewModel
 import com.sumin.vknewsclient.ui.theme.VKNewsClientTheme
 import com.vk.api.sdk.VK.getVKAuthActivityResultContract
 import com.vk.api.sdk.auth.VKScope
