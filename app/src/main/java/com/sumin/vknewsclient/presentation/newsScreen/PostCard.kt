@@ -185,11 +185,11 @@ private fun IconWithText(
         },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = count)
-        Spacer(Modifier.width(4.dp))
         Icon(
             painter = painterResource(iconResId),
             contentDescription = contentDescription
         )
+        Spacer(Modifier.width(4.dp))
+        Text(text = count)
     }
 }
