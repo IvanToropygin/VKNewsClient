@@ -45,7 +45,7 @@ fun PostCard(
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
-    onLikeClickListener: (StatisticItem) -> Unit
+    onLikeClickListener: (StatisticItem) -> Unit,
 ) {
     Card(
         modifier = Modifier
@@ -55,9 +55,11 @@ fun PostCard(
         shape = RoundedCornerShape(4.dp),
         border = BorderStroke(width = 1.dp, color = MaterialTheme.colorScheme.onBackground)
     ) {
-
         PostHeader(feedPost)
-        Text(text = feedPost.content)
+        Text(
+            modifier = Modifier.padding(8.dp),
+            text = feedPost.content
+        )
         Spacer(modifier = Modifier.height(8.dp))
         AsyncImage(
             model = feedPost.contentImageUrl,
@@ -82,7 +84,9 @@ fun PostCard(
 @Composable
 private fun PostHeader(feedPost: FeedPost) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         AsyncImage(
@@ -97,18 +101,15 @@ private fun PostHeader(feedPost: FeedPost) {
             Text(
                 text = feedPost.communityName,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onPrimary
             )
             Text(
                 text = feedPost.publicationDate,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSecondary
             )
         }
         Icon(
             imageVector = Icons.Rounded.MoreVert,
             contentDescription = stringResource(R.string.more_button),
-            tint = MaterialTheme.colorScheme.onPrimary
         )
     }
 }
@@ -119,7 +120,7 @@ private fun Statistics(
     onViewsClickListener: (StatisticItem) -> Unit,
     onShareClickListener: (StatisticItem) -> Unit,
     onCommentClickListener: (StatisticItem) -> Unit,
-    onLikeClickListener: (StatisticItem) -> Unit
+    onLikeClickListener: (StatisticItem) -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -188,8 +189,7 @@ private fun IconWithText(
         Spacer(Modifier.width(4.dp))
         Icon(
             painter = painterResource(iconResId),
-            contentDescription = contentDescription,
-            tint = MaterialTheme.colorScheme.onSecondary
+            contentDescription = contentDescription
         )
     }
 }

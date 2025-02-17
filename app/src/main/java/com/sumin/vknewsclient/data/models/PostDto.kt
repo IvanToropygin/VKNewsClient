@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PostDto(
     @SerializedName("id") val id: String,
-    @SerializedName("sourceId") val communityId: Long,
+    @SerializedName("source_id") val communityId: Long,
     @SerializedName("isFavourite") val isFavourite: Boolean,
     @SerializedName("text") val text: String,
     @SerializedName("date") val date: Long,
