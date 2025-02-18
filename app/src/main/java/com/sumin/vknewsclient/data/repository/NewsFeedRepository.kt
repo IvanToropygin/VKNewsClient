@@ -1,9 +1,11 @@
 package com.sumin.vknewsclient.data.repository
 
 import android.app.Application
+import android.util.Log
 import com.sumin.vknewsclient.data.mappers.NewsFeedMapper
 import com.sumin.vknewsclient.data.network.ApiFactory
 import com.sumin.vknewsclient.domain.FeedPost
+import com.sumin.vknewsclient.domain.PostComment
 import com.sumin.vknewsclient.domain.StatisticItem
 import com.sumin.vknewsclient.domain.StatisticType
 import com.vk.api.sdk.VKPreferencesKeyValueStorage
@@ -46,6 +48,16 @@ class NewsFeedRepository(application: Application) {
             postId = feedPost.id
         )
         _feedPosts.remove(feedPost)
+    }
+
+    suspend fun getComments(feedPost: FeedPost): List<PostComment> {
+        val comments = apiService.getComments(
+            token = getAccessToken(),
+            ownerId = feedPost.communityId,
+            postId = feedPost.id
+        )
+        Log.d("NewsFeedRepository", "$comments")
+        return mapper.mapResponseToComments(comments)
     }
 
     suspend fun changeLikeStatus(feedPost: FeedPost) {
