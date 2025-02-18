@@ -36,7 +36,6 @@ fun NewsFeedScreen(
                 onCommentsClickListener = onCommentsClickListener
             )
         }
-
         NewsFeedScreenState.Initial -> {}
     }
 }

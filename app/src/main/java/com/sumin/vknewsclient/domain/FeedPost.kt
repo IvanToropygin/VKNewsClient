@@ -18,8 +18,9 @@ data class FeedPost(
     val content: String,
     val contentImageUrl: String?,
     val statistics: List<StatisticItem>,
-    val isFavorite: Boolean
+    val isLiked: Boolean
 ) : Parcelable {
+
     companion object {
 
         val NavigationType: NavType<FeedPost> = object : NavType<FeedPost>(false) {

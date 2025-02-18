@@ -27,12 +27,21 @@ class NewsFeedRepository(application: Application) {
         return posts
     }
 
-    suspend fun addLike(feedPost: FeedPost) {
-        val response = apiService.addLike(
-            token = getAccessToken(),
-            ownerId = feedPost.communityId,
-            postId = feedPost.id
-        )
+    suspend fun changeLikeStatus(feedPost: FeedPost) {
+        val response = if (!feedPost.isLiked) {
+            apiService.addLike(
+                token = getAccessToken(),
+                ownerId = feedPost.communityId,
+                postId = feedPost.id
+            )
+        } else {
+            apiService.deleteLike(
+                token = getAccessToken(),
+                ownerId = feedPost.communityId,
+                postId = feedPost.id
+            )
+        }
+
         val newLikesCount = response.likes.count
         val newStatistics = feedPost.statistics.toMutableList().apply {
             removeIf { it.type == StatisticType.LIKES }
@@ -45,7 +54,7 @@ class NewsFeedRepository(application: Application) {
         }
         val newPost = feedPost.copy(
             statistics = newStatistics,
-            isFavorite = !feedPost.isFavorite
+            isLiked = !feedPost.isLiked
         )
         val postIndex = _feedPosts.indexOf(feedPost)
         _feedPosts[postIndex] = newPost

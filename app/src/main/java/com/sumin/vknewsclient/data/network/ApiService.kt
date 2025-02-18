@@ -18,4 +18,11 @@ interface ApiService {
         @Query("owner_id") ownerId: Long,
         @Query("item_id") postId: Long,
     ): LikesCountResponseDto
+
+    @GET("likes.delete?v=5.199&type=post")
+    suspend fun deleteLike(
+        @Query("access_token") token: String,
+        @Query("owner_id") ownerId: Long,
+        @Query("item_id") postId: Long,
+    ): LikesCountResponseDto
 }
