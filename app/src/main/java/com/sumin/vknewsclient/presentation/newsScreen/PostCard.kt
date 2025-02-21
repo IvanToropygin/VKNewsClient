@@ -33,9 +33,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import com.sumin.vknewsclient.R
-import com.sumin.vknewsclient.domain.FeedPost
-import com.sumin.vknewsclient.domain.StatisticItem
-import com.sumin.vknewsclient.domain.StatisticType
+import com.sumin.vknewsclient.domain.entity.FeedPost
+import com.sumin.vknewsclient.domain.entity.StatisticItem
+import com.sumin.vknewsclient.domain.entity.StatisticType
 import com.sumin.vknewsclient.ui.theme.DarkRed
 import java.util.Locale
 

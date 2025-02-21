@@ -1,6 +1,6 @@
 package com.sumin.vknewsclient.presentation.newsScreen
 
-import com.sumin.vknewsclient.domain.FeedPost
+import com.sumin.vknewsclient.domain.entity.FeedPost
 
 sealed class NewsFeedScreenState {
 
