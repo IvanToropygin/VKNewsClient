@@ -13,10 +13,13 @@ import com.vk.api.sdk.VKPreferencesKeyValueStorage
 import com.vk.api.sdk.auth.VKAccessToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.retry
 import kotlinx.coroutines.flow.stateIn
 
 class NewsFeedRepository(application: Application) {
@@ -50,6 +53,9 @@ class NewsFeedRepository(application: Application) {
             _feedPosts.addAll(posts)
             emit(feedPosts)
         }
+    }.retry {
+        delay(RETRY_TIMEOUT_MILLIS)
+        true
     }
 
     private val apiService = ApiFactory.apiService
@@ -63,10 +69,10 @@ class NewsFeedRepository(application: Application) {
     val recommendations: StateFlow<List<FeedPost>> = loadedListFlow
         .mergeWith(refreshedListFlow)
         .stateIn(
-        scope = coroutineScope,
-        started = SharingStarted.Lazily,
-        initialValue = feedPosts
-    )
+            scope = coroutineScope,
+            started = SharingStarted.Lazily,
+            initialValue = feedPosts
+        )
 
     suspend fun loadNextData() {
         nextDataNeededEvents.emit(Unit)
@@ -93,20 +99,19 @@ class NewsFeedRepository(application: Application) {
     }
 
     suspend fun changeLikeStatus(feedPost: FeedPost) {
-        val response = if (!feedPost.isLiked) {
-            apiService.addLike(
-                token = getAccessToken(),
-                ownerId = feedPost.communityId,
-                postId = feedPost.id
-            )
-        } else {
+        val response = if (feedPost.isLiked) {
             apiService.deleteLike(
                 token = getAccessToken(),
                 ownerId = feedPost.communityId,
                 postId = feedPost.id
             )
+        } else {
+            apiService.addLike(
+                token = getAccessToken(),
+                ownerId = feedPost.communityId,
+                postId = feedPost.id
+            )
         }
-
         val newLikesCount = response.likes.count
         val newStatistics = feedPost.statistics.toMutableList().apply {
             removeIf { it.type == StatisticType.LIKES }
@@ -117,14 +122,16 @@ class NewsFeedRepository(application: Application) {
                 )
             )
         }
-        val newPost = feedPost.copy(
-            statistics = newStatistics,
-            isLiked = !feedPost.isLiked
-        )
+        val newPost = feedPost.copy(statistics = newStatistics, isLiked = !feedPost.isLiked)
         val postIndex = _feedPosts.indexOf(feedPost)
         _feedPosts[postIndex] = newPost
         refreshedListFlow.emit(feedPosts)
     }
 
     private fun getAccessToken() = token?.accessToken ?: throw RuntimeException("Token is null")
+
+    companion object {
+
+        private const val RETRY_TIMEOUT_MILLIS = 1000L
+    }
 }
