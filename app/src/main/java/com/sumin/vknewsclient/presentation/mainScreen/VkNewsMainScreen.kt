@@ -1,7 +1,5 @@
 package com.sumin.vknewsclient.presentation.mainScreen
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -22,12 +20,12 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sumin.vknewsclient.navigation.AppNavGraph
 import com.sumin.vknewsclient.navigation.rememberNavigationState
+import com.sumin.vknewsclient.presentation.ViewModelFactory
 import com.sumin.vknewsclient.presentation.commentsScreen.CommentsScreen
 import com.sumin.vknewsclient.presentation.newsScreen.NewsFeedScreen
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
-fun MainScreen() {
+fun MainScreen(viewModelFactory: ViewModelFactory) {
 
     val navigationState = rememberNavigationState()
 
@@ -62,14 +60,16 @@ fun MainScreen() {
             navHostController = navigationState.navHostController,
             newsFeedScreenContent = {
                 NewsFeedScreen(
+                    viewModelFactory = viewModelFactory,
                     paddingValues = paddingValues,
                     onCommentsClickListener = { feedPost ->
                         navigationState.navigateToComments(feedPost)
-                    }
+                    },
                 )
             },
             commentsScreenContent = { feedPost ->
                 CommentsScreen(
+                    viewModelFactory = viewModelFactory,
                     onBackPressed = { navigationState.navHostController.popBackStack() },
                     feedPost = feedPost
                 )

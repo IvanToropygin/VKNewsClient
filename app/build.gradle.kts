@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("kotlin-parcelize")
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -60,6 +61,14 @@ dependencies {
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.squareup.retrofit2:converter-gson:2.11.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    //Dagger2
+    implementation(libs.dagger2)
+//Dagger2 кодогенератор
+    ksp(libs.dagger2.compiler)
+//Dagger2 аннотации
+    ksp(libs.dagger2.android.processor)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
